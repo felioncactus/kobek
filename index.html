@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Письмо</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&family=Delius+Unicase:wght@400;700&family=Jersey+10&family=Pacifico&family=Rubik+Bubbles&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Background dim overlay -->
+  <div class="bg-dim" id="bgDim" aria-hidden="true"></div>
+
+  <!-- Background music -->
+  <audio id="bgMusic" src="assets/audio/bgmusic.mp3" preload="auto" loop></audio>
+
+  <main class="page">
+    <section class="stage" aria-label="Открой письмо">
+      <button class="envelope-btn" id="envelopeBtn" type="button" aria-expanded="false">
+        <span class="sr-only">Открыть письмо</span>
+
+        <div class="envelope" id="envelope">
+          <div class="airmail-border" aria-hidden="true"></div>
+          <div class="envelope-back" aria-hidden="true"></div>
+
+          <div class="letter" id="letter" role="dialog" aria-label="Письмо" aria-modal="false">
+            <div class="letter-inner">
+              <div class="who">
+                <div class="row">
+                  <span class="label">Кому:</span>
+                  <span class="value" id="toName">Осиповой Валерии</span>
+                </div>
+                <div class="row">
+                  <span class="label">От:</span>
+                  <span class="value" id="fromName">Хан Эдуарда</span>
+                </div>
+              </div>
+
+              <div class="message" id="msg">
+                <p id="typedText"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="envelope-front" aria-hidden="true">
+            <div class="front-paper">
+              <div class="address">
+                <div class="addr-line"></div>
+                <div class="addr-line"></div>
+                <div class="addr-line short"></div>
+              </div>
+              <div class="postmark" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="flap" aria-hidden="true"></div>
+          <div class="shadow" aria-hidden="true"></div>
+        </div>
+      </button>
+
+      <p class="hint" id="hint">Нажми на конверт, чтобы открыть ✨</p>
+
+      <p class="close-hint" id="closeHint" aria-hidden="true">Нажми, чтобы закрыть 💌 (или Esc)</p>
+    </section>
+  </main>
+
+  <script src="scripts/script.js"></script>
+</body>
+</html>
