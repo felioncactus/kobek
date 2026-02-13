@@ -46,7 +46,7 @@
   document.addEventListener("keydown", startOnFirstGesture);
 
   // =========================
-  // WebAudio (rustle + typing)
+  // WebAudio (rustle only)
   // =========================
   let audioCtx = null;
 
@@ -101,77 +101,7 @@
   };
 
   // =========================
-  // Typing sound (no files)
-  // =========================
-  let typeLastAt = 0;
-
-  const makeNoiseBuffer = (ctx, durationSec) => {
-    const sr = ctx.sampleRate;
-    const len = Math.max(1, Math.floor(sr * durationSec));
-    const buf = ctx.createBuffer(1, len, sr);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
-    return buf;
-  };
-
-  let noiseBuf = null;
-
-  const playTypeSound = (ch) => {
-    try {
-      if (!audioCtx) return;
-
-      if (ch === " " || ch === "\t") {
-        if (Math.random() < 0.85) return;
-      }
-      if (ch === "\n") {
-        if (Math.random() < 0.6) return;
-      }
-
-      const now = performance.now();
-      if (now - typeLastAt < 22) return;
-      typeLastAt = now;
-
-      const ctx = audioCtx;
-      const t0 = ctx.currentTime;
-
-      const dur = 0.012 + Math.random() * 0.010;
-
-      if (!noiseBuf) noiseBuf = makeNoiseBuffer(ctx, 0.03);
-
-      const src = ctx.createBufferSource();
-      src.buffer = noiseBuf;
-
-      const band = ctx.createBiquadFilter();
-      band.type = "bandpass";
-      band.frequency.value = 1500 + Math.random() * 1200;
-      band.Q.value = 0.9 + Math.random() * 0.7;
-
-      const hp = ctx.createBiquadFilter();
-      hp.type = "highpass";
-      hp.frequency.value = 380;
-
-      const gain = ctx.createGain();
-      const base = ch === "\n" ? 0.05 : 0.035;
-      const vol = base + Math.random() * 0.02;
-
-      gain.gain.setValueAtTime(0.0, t0);
-      gain.gain.linearRampToValueAtTime(vol, t0 + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-
-      src.connect(band);
-      band.connect(hp);
-      hp.connect(gain);
-      gain.connect(ctx.destination);
-
-      src.start(t0);
-      src.stop(t0 + dur + 0.01);
-    } catch {
-      // ignore
-    }
-  };
-
-  // =========================
-  // Typing effect
+  // Typing effect (no typing sound)
   // =========================
   const TEXT_RU = [
     "Надеюсь это письмо застанет тебя в отличном настроении и в хорошем здравии в любое время суток этого прекрасного дня!",
@@ -199,7 +129,6 @@
       cancelAnimationFrame(scrollRaf);
       scrollRaf = 0;
     }
-    typeLastAt = 0;
     if (typedEl) typedEl.textContent = "";
     if (messageBox) messageBox.scrollTop = 0;
   };
@@ -233,9 +162,7 @@
       const ch = text[i - 1];
       typedEl.textContent = text.slice(0, i);
 
-      if (audioCtx && audioCtx.state !== "suspended") {
-        playTypeSound(ch);
-      }
+      // звук печатания УБРАН
 
       scheduleScrollToBottom();
       if (i >= text.length) return;
@@ -295,3 +222,4 @@
 
   bgDim.addEventListener("pointerdown", () => setOpen(false), { passive: true });
 })();
+
